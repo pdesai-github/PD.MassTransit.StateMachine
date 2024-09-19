@@ -22,7 +22,7 @@ namespace PD.MassTransit.StateMachine
 
                 x.UsingAzureServiceBus((context, cfg) =>
                 {
-                    cfg.Host("Endpoint=sb://pdazservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=kMgsjvp/SElaBQZ/JyjelWap1uWimfXMA+ASbKQJMcI=");
+                    cfg.Host("");
                     cfg.Message<OrderSubmitted>(x =>
                     {
                         x.SetEntityName("ordertopic"); // Set entity name explicitly

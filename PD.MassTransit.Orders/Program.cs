@@ -20,7 +20,7 @@ namespace PD.MassTransit.Orders
             {
                 x.UsingAzureServiceBus((context, cfg) =>
                 {
-                    cfg.Host("Endpoint=sb://pdazservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=kMgsjvp/SElaBQZ/JyjelWap1uWimfXMA+ASbKQJMcI=");
+                    cfg.Host("");
 
                     cfg.Message<OrderSubmitted>(configTopology =>
                     {
