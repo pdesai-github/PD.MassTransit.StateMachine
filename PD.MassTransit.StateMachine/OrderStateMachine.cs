@@ -30,11 +30,14 @@ namespace PD.MassTransit.StateMachine
                         context.Instance.OrderId = context.Data.OrderId;
                         context.Instance.Created = context.Data.Timestamp;
                     }).
-                    Publish(context => new PaymentProcessed
+                    Publish(context => 
                     {
-                        CorrelationId = context.Data.CorrelationId,
-                        OrderId = context.Data.OrderId,
-                        Timestamp = context.Data.Timestamp
+                        return new PaymentProcessed
+                        {
+                            CorrelationId = context.Data.CorrelationId,
+                            OrderId = context.Data.OrderId,
+                            Timestamp = context.Data.Timestamp
+                        };
                     })
                     .TransitionTo(Submitted)
             );

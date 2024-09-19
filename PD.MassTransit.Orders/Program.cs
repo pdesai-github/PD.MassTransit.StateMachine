@@ -27,10 +27,6 @@ namespace PD.MassTransit.Orders
                         configTopology.SetEntityName("ordertopic"); // Topic name
                     });
 
-                    cfg.Message<PaymentProcessed>(configTopology =>
-                    {
-                        configTopology.SetEntityName("ordertopic"); // Topic name
-                    });
 
                     cfg.ConfigureEndpoints(context);
                 });
