@@ -37,10 +37,7 @@ namespace PD.MassTransit.StateMachine
                         endpointConfig.ConfigureSaga<OrderState>(context);
                     });
 
-                    cfg.SubscriptionEndpoint<PaymentProcessed>("NotificationSubscription", endpointConfig =>
-                    {
-                        endpointConfig.ConfigureSaga<OrderState>(context);
-                    });
+                  
 
                     cfg.ConfigureEndpoints(context);
                 });

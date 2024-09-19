@@ -29,18 +29,17 @@ namespace PD.MassTransit.StateMachine
                     {
                         context.Instance.OrderId = context.Data.OrderId;
                         context.Instance.Created = context.Data.Timestamp;
+                    }).
+                    Publish(context => new PaymentProcessed
+                    {
+                        CorrelationId = context.Data.CorrelationId,
+                        OrderId = context.Data.OrderId,
+                        Timestamp = context.Data.Timestamp
                     })
                     .TransitionTo(Submitted)
             );
 
-            During(Submitted,
-                When(PaymentProcessed)
-                    .Then(context =>
-                    {
-                        context.Instance.Created = context.Data.Timestamp;
-                    })
-                    .TransitionTo(Paid)
-            );
+           
 
         }
     }
@@ -56,9 +55,9 @@ namespace PD.MassTransit.StateMachine
 
     public class PaymentProcessed
     {
-        public Guid CorrelationId { get; }
-        public Guid OrderId { get; }
-        public DateTime Timestamp { get; }
+        public Guid CorrelationId { get; set; }
+        public Guid OrderId { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }
 
