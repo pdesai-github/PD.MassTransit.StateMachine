@@ -28,6 +28,11 @@ namespace PD.MassTransit.StateMachine
                         x.SetEntityName("ordertopic"); // Set entity name explicitly
                     });
 
+                    cfg.Message<PaymentSuccessfull>(x =>
+                    {
+                        x.SetEntityName("ordertopic"); // Set entity name explicitly
+                    });
+
                     cfg.Message<PaymentProcessed>(x =>
                     {
                         x.SetEntityName("ordertopic"); // Set entity name explicitly
