@@ -22,11 +22,17 @@ namespace PD.MassTransit.Payment
 
                 x.UsingAzureServiceBus((context, cfg) =>
                 {
-                    cfg.Host("");
+                    cfg.Host("Endpoint=sb://pdazservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=kMgsjvp/SElaBQZ/JyjelWap1uWimfXMA+ASbKQJMcI=");
                     cfg.Message<PaymentProcessed>(configTopology =>
                     {
                         configTopology.SetEntityName("ordertopic");  // This defines the topic name explicitly
                     });
+
+                    cfg.Message<PaymentSuccessfull>(configTopology =>
+                    {
+                        configTopology.SetEntityName("ordertopic"); // Topic name
+                    });
+
                     cfg.SubscriptionEndpoint<PaymentProcessed>("NotificationSubscription", endpointConfig =>
                     {
                         endpointConfig.ConfigureConsumer<PaymentConsumer>(context);

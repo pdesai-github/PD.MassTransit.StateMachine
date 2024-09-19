@@ -10,11 +10,14 @@ namespace PD.MassTransit.Payment
             // Simulate payment processing
             Console.WriteLine($"Processing payment for Order: {context.Message.OrderId}");
 
-            //await context.Publish<PaymentProcessed>(new
-            //{
-            //    context.Message.OrderId,
-            //    Timestamp = DateTime.UtcNow
-            //});
+            PaymentSuccessfull paymentSuccessful = new PaymentSuccessfull
+            {
+                CorrelationId = context.Message.CorrelationId,
+                OrderId = context.Message.OrderId,
+                Timestamp = DateTime.UtcNow
+            };
+
+            await context.Publish<PaymentSuccessfull>(paymentSuccessful);
         }
     }
 }

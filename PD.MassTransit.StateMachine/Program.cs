@@ -22,7 +22,7 @@ namespace PD.MassTransit.StateMachine
 
                 x.UsingAzureServiceBus((context, cfg) =>
                 {
-                    cfg.Host("");
+                    cfg.Host("Endpoint=sb://pdazservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=kMgsjvp/SElaBQZ/JyjelWap1uWimfXMA+ASbKQJMcI=");
                     cfg.Message<OrderSubmitted>(x =>
                     {
                         x.SetEntityName("ordertopic"); // Set entity name explicitly
@@ -37,7 +37,11 @@ namespace PD.MassTransit.StateMachine
                         endpointConfig.ConfigureSaga<OrderState>(context);
                     });
 
-                  
+                    cfg.SubscriptionEndpoint<PaymentSuccessfull>("PaymentSuccessfullSunscription", endpointConfig =>
+                    {
+                        endpointConfig.ConfigureSaga<OrderState>(context);
+                    });
+
 
                     cfg.ConfigureEndpoints(context);
                 });

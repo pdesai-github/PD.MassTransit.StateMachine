@@ -10,6 +10,8 @@ namespace PD.MassTransit.StateMachine
         public Event<OrderSubmitted> OrderSubmittedEvent { get; private set; }
         public Event<PaymentProcessed> PaymentProcessed { get; private set; }
 
+        public Event<PaymentSuccessfull> PaymentSuccessfullEvent { get; private set; }
+
         public OrderStateMachine()
         {
             InstanceState(x => x.CurrentState);
@@ -22,6 +24,10 @@ namespace PD.MassTransit.StateMachine
             {
                 x.CorrelateById(context => context.Message.CorrelationId);
             });
+            Event(() => PaymentSuccessfullEvent, x =>
+            {
+                x.CorrelateById(context => context.Message.CorrelationId);
+            });
 
             Initially(
                 When(OrderSubmittedEvent)
@@ -29,8 +35,10 @@ namespace PD.MassTransit.StateMachine
                     {
                         context.Instance.OrderId = context.Data.OrderId;
                         context.Instance.Created = context.Data.Timestamp;
+                        context.Instance.CurrentState = "Submitted"; // Change state to "Submitted"
+
                     }).
-                    Publish(context => 
+                    Publish(context =>
                     {
                         return new PaymentProcessed
                         {
@@ -40,10 +48,17 @@ namespace PD.MassTransit.StateMachine
                         };
                     })
                     .TransitionTo(Submitted)
+
             );
 
-           
-
+            During(Submitted,
+                When(PaymentSuccessfullEvent)
+                    .Then(context =>
+                    {
+                        context.Instance.OrderId = context.Data.OrderId;
+                    })
+                    .TransitionTo(Paid)
+            );
         }
     }
 
@@ -61,6 +76,14 @@ namespace PD.MassTransit.StateMachine
         public Guid CorrelationId { get; set; }
         public Guid OrderId { get; set; }
         public DateTime Timestamp { get; set; }
+    }
+
+    public class PaymentSuccessfull
+    {
+        public Guid CorrelationId { get; set; }
+        public Guid OrderId { get; set; }
+        public DateTime Timestamp { get; set; }
+
     }
 }
 
